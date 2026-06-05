@@ -318,32 +318,32 @@
 <div class="screen" id="screen-tv">
   <div class="section-title">Choisissez votre chaîne</div>
   <div class="channels-grid">
-    <div class="channel-btn" onclick="launchChannel('TF1', 'tf1plus://channel/tf1')">
+    <div class="channel-btn" onclick="launchChannel('TF1', 'molotov://www.molotov.tv/live/channel/tmc/2')">
       <div class="channel-number">Chaîne 1</div>
       <div class="channel-name">TF1</div>
       <div class="channel-desc">Divertissement</div>
     </div>
-    <div class="channel-btn" onclick="launchChannel('France 2', 'francetv://france-2')">
+    <div class="channel-btn" onclick="launchChannel('France 2', 'molotov://www.molotov.tv/live/channel/france-2/4')">
       <div class="channel-number">Chaîne 2</div>
       <div class="channel-name">France 2</div>
       <div class="channel-desc">Information & Culture</div>
     </div>
-    <div class="channel-btn" onclick="launchChannel('France 3', 'francetv://france-3')">
+    <div class="channel-btn" onclick="launchChannel('France 3', 'molotov://www.molotov.tv/live/channel/france-3/5')">
       <div class="channel-number">Chaîne 3</div>
       <div class="channel-name">France 3</div>
       <div class="channel-desc">Régional</div>
     </div>
-    <div class="channel-btn" onclick="launchChannel('M6', 'molotov://channel/m6')">
+    <div class="channel-btn" onclick="launchChannel('M6', 'molotov://www.molotov.tv/live/channel/m6/6')">
       <div class="channel-number">Chaîne 6</div>
       <div class="channel-name">M6</div>
       <div class="channel-desc">Divertissement</div>
     </div>
-    <div class="channel-btn" onclick="launchChannel('Arte', 'molotov://channel/arte')">
+    <div class="channel-btn" onclick="launchChannel('Arte', 'molotov://www.molotov.tv/live/channel/arte/7')">
       <div class="channel-number">Chaîne 7</div>
       <div class="channel-name">Arte</div>
       <div class="channel-desc">Culture & Cinéma</div>
     </div>
-    <div class="channel-btn" onclick="launchChannel('France 5', 'francetv://france-5')">
+    <div class="channel-btn" onclick="launchChannel('France 5', 'molotov://www.molotov.tv/live/channel/france-5/8')">
       <div class="channel-number">Chaîne 5</div>
       <div class="channel-name">France 5</div>
       <div class="channel-desc">Documentaires</div>
@@ -389,12 +389,10 @@
   // ---- CHAÎNES ----
   function launchChannel(name, url) {
     document.getElementById('modalTitle').textContent = name;
-    document.getElementById('modalDesc').textContent = 'Voulez-vous regarder ' + name + ' ?';
+    document.getElementById('modalDesc').textContent = 'Molotov va s\'ouvrir sur ' + name + '.';
     document.getElementById('modalConfirm').onclick = () => {
       closeModal();
-      // Sur Fire TV, tente d'ouvrir Molotov sur la chaîne
-      // Pour Molotov, on ouvre l'app via intent
-      window.location.href = 'intent://open#Intent;scheme=molotov;package=tv.molotov.app;end';
+      window.location.href = url;
     };
     document.getElementById('modalOverlay').classList.add('open');
   }
@@ -496,10 +494,11 @@
 
   function openPrimeVideo(titre) {
     document.getElementById('modalTitle').textContent = titre;
-    document.getElementById('modalDesc').textContent = 'Prime Video va s\'ouvrir pour ce film.';
+    document.getElementById('modalDesc').textContent = 'Prime Video va s\'ouvrir. Cherchez "' + titre + '" dans la recherche.';
     document.getElementById('modalConfirm').onclick = () => {
       closeModal();
-      window.location.href = 'intent://search?phrase=' + encodeURIComponent(titre) + '#Intent;scheme=primevideo;package=com.amazon.avod.thirdpartyclient;end';
+      // Ouvre Prime Video directement (l'app native sur Fire TV)
+      window.location.href = 'amzn://apps/android?asin=B00Y0QI5SQ';
     };
     document.getElementById('modalOverlay').classList.add('open');
   }
