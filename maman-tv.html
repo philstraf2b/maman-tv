@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma Télévision</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #1a1a2e;
+    --bg2: #16213e;
+    --accent: #e8c97e;
+    --accent2: #c4a45a;
+    --text: #f0ece0;
+    --text-dim: #a09880;
+    --card: #0f3460;
+    --card2: #1a2a4a;
+    --red: #e85d5d;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: var(--bg2);
+    border-bottom: 2px solid var(--accent2);
+  }
+
+  .logo {
+    font-family: 'Lora', serif;
+    font-size: 1.6rem;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  .back-btn {
+    background: var(--card);
+    border: 2px solid var(--accent2);
+    color: var(--accent);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1.1rem;
+    padding: 10px 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    display: none;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { background: var(--accent2); color: var(--bg); }
+  .back-btn.visible { display: block; }
+
+  /* SCREENS */
+  .screen { display: none; flex: 1; flex-direction: column; justify-content: center; align-items: center; padding: 30px 40px; }
+  .screen.active { display: flex; }
+
+  /* ===== ACCUEIL ===== */
+  #screen-home .subtitle {
+    font-size: 1.3rem;
+    color: var(--text-dim);
+    margin-bottom: 50px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .home-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .home-card {
+    background: var(--card);
+    border: 3px solid var(--card2);
+    border-radius: 20px;
+    padding: 50px 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .home-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(232,201,126,0.15);
+  }
+
+  .home-card .icon { font-size: 5rem; line-height: 1; }
+  .home-card .label {
+    font-family: 'Lora', serif;
+    font-size: 2rem;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ===== TV ===== */
+  #screen-tv .section-title,
+  #screen-films .section-title {
+    font-family: 'Lora', serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    margin-bottom: 35px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  .channels-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 860px;
+  }
+
+  .channel-btn {
+    background: var(--card);
+    border: 3px solid var(--card2);
+    border-radius: 16px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .channel-btn:hover {
+    border-color: var(--accent);
+    transform: scale(1.04);
+    box-shadow: 0 8px 30px rgba(232,201,126,0.12);
+  }
+
+  .channel-number {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .channel-name {
+    font-family: 'Lora', serif;
+    font-size: 1.6rem;
+    color: var(--text);
+    font-weight: 700;
+  }
+  .channel-desc {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  /* ===== FILMS ===== */
+  #screen-films { justify-content: flex-start; padding-top: 30px; }
+
+  .films-container {
+    width: 100%;
+    max-width: 900px;
+    overflow-y: auto;
+    max-height: calc(100vh - 180px);
+    padding-right: 10px;
+  }
+
+  .films-container::-webkit-scrollbar { width: 6px; }
+  .films-container::-webkit-scrollbar-track { background: var(--bg2); }
+  .films-container::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 10px; }
+
+  .category-title {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 25px 0 12px;
+    padding-left: 5px;
+    border-left: 3px solid var(--accent);
+    padding-left: 12px;
+  }
+
+  .film-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+
+  .film-item {
+    background: var(--card);
+    border: 2px solid var(--card2);
+    border-radius: 12px;
+    padding: 16px 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .film-item:hover {
+    border-color: var(--accent);
+    background: var(--card2);
+    transform: translateX(4px);
+  }
+
+  .film-info { display: flex; flex-direction: column; gap: 3px; }
+  .film-title {
+    font-family: 'Lora', serif;
+    font-size: 1.2rem;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .film-meta { font-size: 0.85rem; color: var(--text-dim); }
+  .film-arrow { color: var(--accent2); font-size: 1.2rem; }
+
+  /* LOADING */
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    color: var(--text-dim);
+    font-size: 1.1rem;
+  }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--card2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* MODAL confirmation */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg2);
+    border: 3px solid var(--accent2);
+    border-radius: 20px;
+    padding: 40px 50px;
+    text-align: center;
+    max-width: 500px;
+  }
+  .modal h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.6rem;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .modal p { color: var(--text-dim); margin-bottom: 30px; font-size: 1rem; }
+  .modal-btns { display: flex; gap: 16px; justify-content: center; }
+  .modal-btns button {
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-family: 'Source Sans 3', sans-serif;
+    cursor: pointer;
+    border: 2px solid;
+    transition: all 0.2s;
+  }
+  .btn-confirm {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+    font-weight: 600;
+  }
+  .btn-confirm:hover { background: var(--accent2); border-color: var(--accent2); }
+  .btn-cancel {
+    background: transparent;
+    border-color: var(--text-dim);
+    color: var(--text-dim);
+  }
+  .btn-cancel:hover { border-color: var(--text); color: var(--text); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">📺 Ma Télévision</div>
+  <button class="back-btn" id="backBtn" onclick="goHome()">← Accueil</button>
+</header>
+
+<!-- ACCUEIL -->
+<div class="screen active" id="screen-home">
+  <p class="subtitle">Que souhaitez-vous regarder ?</p>
+  <div class="home-grid">
+    <div class="home-card" onclick="showScreen('tv')">
+      <div class="icon">📺</div>
+      <div class="label">Télévision</div>
+    </div>
+    <div class="home-card" onclick="showScreen('films')">
+      <div class="icon">🎬</div>
+      <div class="label">Films &amp; Séries</div>
+    </div>
+  </div>
+</div>
+
+<!-- TV -->
+<div class="screen" id="screen-tv">
+  <div class="section-title">Choisissez votre chaîne</div>
+  <div class="channels-grid">
+    <div class="channel-btn" onclick="launchChannel('TF1', 'tf1plus://channel/tf1')">
+      <div class="channel-number">Chaîne 1</div>
+      <div class="channel-name">TF1</div>
+      <div class="channel-desc">Divertissement</div>
+    </div>
+    <div class="channel-btn" onclick="launchChannel('France 2', 'francetv://france-2')">
+      <div class="channel-number">Chaîne 2</div>
+      <div class="channel-name">France 2</div>
+      <div class="channel-desc">Information & Culture</div>
+    </div>
+    <div class="channel-btn" onclick="launchChannel('France 3', 'francetv://france-3')">
+      <div class="channel-number">Chaîne 3</div>
+      <div class="channel-name">France 3</div>
+      <div class="channel-desc">Régional</div>
+    </div>
+    <div class="channel-btn" onclick="launchChannel('M6', 'molotov://channel/m6')">
+      <div class="channel-number">Chaîne 6</div>
+      <div class="channel-name">M6</div>
+      <div class="channel-desc">Divertissement</div>
+    </div>
+    <div class="channel-btn" onclick="launchChannel('Arte', 'molotov://channel/arte')">
+      <div class="channel-number">Chaîne 7</div>
+      <div class="channel-name">Arte</div>
+      <div class="channel-desc">Culture & Cinéma</div>
+    </div>
+    <div class="channel-btn" onclick="launchChannel('France 5', 'francetv://france-5')">
+      <div class="channel-number">Chaîne 5</div>
+      <div class="channel-name">France 5</div>
+      <div class="channel-desc">Documentaires</div>
+    </div>
+  </div>
+</div>
+
+<!-- FILMS -->
+<div class="screen" id="screen-films">
+  <div class="section-title">Films &amp; Séries — Prime Video</div>
+  <div class="films-container" id="filmsContainer">
+    <div class="loading">
+      <div class="spinner"></div>
+      <span>Recherche des films pour vous…</span>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalTitle">Lancer la chaîne ?</h2>
+    <p id="modalDesc">Molotov va s'ouvrir sur cette chaîne.</p>
+    <div class="modal-btns">
+      <button class="btn-confirm" id="modalConfirm">▶ Regarder</button>
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentAction = null;
+
+  function showScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    document.getElementById('backBtn').classList.toggle('visible', name !== 'home');
+    if (name === 'films') loadFilms();
+  }
+
+  function goHome() { showScreen('home'); }
+
+  // ---- CHAÎNES ----
+  function launchChannel(name, url) {
+    document.getElementById('modalTitle').textContent = name;
+    document.getElementById('modalDesc').textContent = 'Voulez-vous regarder ' + name + ' ?';
+    document.getElementById('modalConfirm').onclick = () => {
+      closeModal();
+      // Sur Fire TV, tente d'ouvrir Molotov sur la chaîne
+      // Pour Molotov, on ouvre l'app via intent
+      window.location.href = 'intent://open#Intent;scheme=molotov;package=tv.molotov.app;end';
+    };
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  // ---- FILMS via Claude API ----
+  async function loadFilms() {
+    const container = document.getElementById('filmsContainer');
+    container.innerHTML = '<div class="loading"><div class="spinner"></div><span>Recherche des films pour vous…</span></div>';
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{
+            role: 'user',
+            content: `Donne-moi une liste de 16 films disponibles sur Amazon Prime Video France, adaptés à une femme de 75 ans qui aime les films romantiques et comiques. 
+            Réponds UNIQUEMENT en JSON valide, sans aucun texte avant ou après, sans balises markdown.
+            Format exact :
+            {
+              "romantiques": [
+                {"titre": "Nom du film", "annee": "2010", "resume": "Une phrase courte"},
+                ...
+              ],
+              "comiques": [
+                {"titre": "Nom du film", "annee": "2015", "resume": "Une phrase courte"},
+                ...
+              ]
+            }
+            8 films romantiques et 8 films comiques.`
+          }]
+        })
+      });
+
+      const data = await response.json();
+      const text = data.content.map(i => i.text || '').join('');
+      const clean = text.replace(/```json|```/g, '').trim();
+      const films = JSON.parse(clean);
+      renderFilms(films);
+    } catch (e) {
+      container.innerHTML = renderFilmsStatic();
+    }
+  }
+
+  function renderFilms(films) {
+    const container = document.getElementById('filmsContainer');
+    let html = '';
+
+    html += '<div class="category-title">💕 Films romantiques</div><div class="film-list">';
+    films.romantiques.forEach(f => {
+      html += `<div class="film-item" onclick="openPrimeVideo('${f.titre.replace(/'/g,"\\'")}')">
+        <div class="film-info">
+          <div class="film-title">${f.titre}</div>
+          <div class="film-meta">${f.annee} · ${f.resume}</div>
+        </div>
+        <div class="film-arrow">▶</div>
+      </div>`;
+    });
+    html += '</div>';
+
+    html += '<div class="category-title">😄 Films comiques</div><div class="film-list">';
+    films.comiques.forEach(f => {
+      html += `<div class="film-item" onclick="openPrimeVideo('${f.titre.replace(/'/g,"\\'")}')">
+        <div class="film-info">
+          <div class="film-title">${f.titre}</div>
+          <div class="film-meta">${f.annee} · ${f.resume}</div>
+        </div>
+        <div class="film-arrow">▶</div>
+      </div>`;
+    });
+    html += '</div>';
+
+    container.innerHTML = html;
+  }
+
+  function renderFilmsStatic() {
+    return `
+      <div class="category-title">💕 Films romantiques</div>
+      <div class="film-list">
+        <div class="film-item" onclick="openPrimeVideo('Le Discours')"><div class="film-info"><div class="film-title">Le Discours</div><div class="film-meta">2020 · Une comédie romantique française pleine de charme</div></div><div class="film-arrow">▶</div></div>
+        <div class="film-item" onclick="openPrimeVideo('Coup de foudre à Notting Hill')"><div class="film-info"><div class="film-title">Coup de foudre à Notting Hill</div><div class="film-meta">1999 · Un classique tendre et émouvant</div></div><div class="film-arrow">▶</div></div>
+        <div class="film-item" onclick="openPrimeVideo('Mamma Mia')"><div class="film-info"><div class="film-title">Mamma Mia</div><div class="film-meta">2008 · Musique, amour et bonne humeur en Grèce</div></div><div class="film-arrow">▶</div></div>
+        <div class="film-item" onclick="openPrimeVideo('Le Cercle des neiges')"><div class="film-info"><div class="film-title">Pretty Woman</div><div class="film-meta">1990 · Le grand classique romantique</div></div><div class="film-arrow">▶</div></div>
+      </div>
+      <div class="category-title">😄 Films comiques</div>
+      <div class="film-list">
+        <div class="film-item" onclick="openPrimeVideo('Le Prénom')"><div class="film-info"><div class="film-title">Le Prénom</div><div class="film-meta">2012 · Une soirée en famille qui dérape avec humour</div></div><div class="film-arrow">▶</div></div>
+        <div class="film-item" onclick="openPrimeVideo('Intouchables')"><div class="film-info"><div class="film-title">Intouchables</div><div class="film-meta">2011 · Rires et émotions, un film adoré de tous</div></div><div class="film-arrow">▶</div></div>
+        <div class="film-item" onclick="openPrimeVideo('Qu est-ce qu on a fait au Bon Dieu')"><div class="film-info"><div class="film-title">Qu'est-ce qu'on a fait au Bon Dieu ?</div><div class="film-meta">2014 · Comédie familiale hilarante</div></div><div class="film-arrow">▶</div></div>
+        <div class="film-item" onclick="openPrimeVideo('La Vérité si je mens')"><div class="film-info"><div class="film-title">La Vérité si je mens !</div><div class="film-meta">1997 · Comédie culte française</div></div><div class="film-arrow">▶</div></div>
+      </div>`;
+  }
+
+  function openPrimeVideo(titre) {
+    document.getElementById('modalTitle').textContent = titre;
+    document.getElementById('modalDesc').textContent = 'Prime Video va s\'ouvrir pour ce film.';
+    document.getElementById('modalConfirm').onclick = () => {
+      closeModal();
+      window.location.href = 'intent://search?phrase=' + encodeURIComponent(titre) + '#Intent;scheme=primevideo;package=com.amazon.avod.thirdpartyclient;end';
+    };
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+</script>
+</body>
+</html>
